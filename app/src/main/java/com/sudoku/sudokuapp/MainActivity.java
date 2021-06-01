@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -29,10 +31,25 @@ public class MainActivity extends AppCompatActivity {
         // Bucle de omplir totes les cel·les del sudoku
         for (int i = 0; i < 9; i++){
             TableRow row = new TableRow(this);
-            for (int y = 0; y < 9;y++){
+            for (int y = 0; y < 9; y++){
+                int posI = i;
+                int posY = y;
                 cells[i][y] = new Spinner(this);
                 cells[i][y].setAdapter(spinnerAdapter);
                 cells[i][y].setBackground(null);
+                cells[i][y].setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d("POSITION", position+"");
+                        Log.d("POSICION", "i="+posI+" y="+posY);
+                        boolean check = checkSudokuGrid(posI, posY, position);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
 
                 // Per definir els quadrants deixem un padding inferior a la i
                 if(i == 2 || i == 5){
@@ -52,6 +69,30 @@ public class MainActivity extends AppCompatActivity {
             tLayout.addView(row);
         }
 
-
     }
+
+    public boolean checkSudokuGrid(int i, int y, int value){
+
+        if (i < 3 && y < 3){
+            Log.d("Posicion modificada", i+"   "+y);
+            for (int x = 0; x < 3; x++){
+                for (int z = 0; z < 3;z++){
+                    if((x != z || y != x) && !cells[x][z].getSelectedItem().toString().equals(" ") && Integer.parseInt(cells[x][z].getSelectedItem().toString()) == value){
+                        Log.d("Igual", value+"   posX="+x+"   posZ="+z);
+                    }
+                }
+            }
+        } else if (i < 3 && y > 2 && y < 6){
+            for (int x = 0; x < 3; x++){
+                for (int z = 3; z < 6;z++){
+                    if(!cells[x][z].getSelectedItem().toString().equals(" ") && Integer.parseInt(cells[x][z].getSelectedItem().toString()) == value){
+                        Log.d("Posicion modificada", i+"   "+y);
+                        Log.d("Igual", value+"   posX="+x+"   posZ="+z);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 }
