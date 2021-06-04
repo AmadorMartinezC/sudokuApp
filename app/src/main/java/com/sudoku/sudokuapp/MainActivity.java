@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             tLayout.addView(row);
         }
 
-        for (int cont = 0; cont <= 80; cont++){
+        for (int cont = 0; cont <= 16; cont++){
             int i = (int) (Math.random() * nums.length - 1);
             int y = (int) (Math.random() * nums.length - 1);
             if(cells[i][y].getSelectedItem().toString().equals(" ")){
