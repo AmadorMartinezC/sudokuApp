@@ -3,6 +3,7 @@ package com.sudoku.sudokuapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.invoke.ConstantCallSite;
 import java.util.ArrayList;
@@ -23,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
     final private String[] nums = {" ","1","2","3","4","5","6","7","8","9"};
     private Spinner[][] cells = new Spinner[9][9];
     private ArrayAdapter<String> spinnerAdapter;
-    private boolean firstStart = true;
-    private int cont = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +58,12 @@ public class MainActivity extends AppCompatActivity {
                         // Si cualquiera de las funciones devuelve false, se borra el numero porque esta repetido
                         if (!grid || !horitzontal || !vertical){
                             cells[posI][posY].setSelection(0);
+                            Toast toast = Toast.makeText(getApplicationContext(), "NÚMERO INCORRECTE", Toast.LENGTH_SHORT);
+                            toast.show();
                         } else {
                             boolean finish = finishCheck();
                             if(finish){
-                                Log.d("FINISH", "ACABADO");
+                                finishFunc();
                             }
                         }
                     }
@@ -76,14 +78,24 @@ public class MainActivity extends AppCompatActivity {
             tLayout.addView(row);
         }
 
-        while (cont < 16){
+        for (int cont = 0; cont <= 80; cont++){
             int i = (int) (Math.random() * nums.length - 1);
             int y = (int) (Math.random() * nums.length - 1);
             if(cells[i][y].getSelectedItem().toString().equals(" ")){
                 cells[i][y].setSelection((int) (Math.random() * nums.length - 1)+1);
-                cont++;
+            } else {
+                cont--;
             }
         }
+    }
+
+    public void finishFunc(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("FELICIDADES");
+        builder.setMessage("Has acabado el sudoku!");
+        builder.setPositiveButton("Aceptar", null);
+        builder.create();
+        builder.show();
     }
 
     public boolean checkSudokuGrid(int i, int y, int value){
