@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import java.lang.invoke.ConstantCallSite;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, nums);
+        spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout, nums);
 
         TableLayout tLayout = findViewById(R.id.tableLayout);
         // Bucle de omplir totes les cel·les del sudoku
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 cells[i][y].setAdapter(spinnerAdapter);
                 cells[i][y].setBackground(null);
                 if ((i%2==0 && y%2==0) || (i%2!=0 && y%2!=0)){
-                    cells[i][y].setBackgroundColor(Color.parseColor("#BDFCEB"));
+                    cells[i][y].setBackgroundColor(Color.parseColor("#9b9b9b"));
                 } else {
                     cells[i][y].setBackgroundColor(Color.parseColor("#FFFFFF"));
                 }
@@ -70,20 +71,6 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-
-                // Per definir els quadrants deixem un padding inferior a la i
-                if(i == 2 || i == 5){
-                    cells[i][y].setPadding(0,0,0,100);
-                } else {
-                    cells[i][y].setPadding(0,0,0,0);
-                }
-
-                // Per definir els quadrants finalment deixem un padding dret a la y
-                if (y == 2||y==5) {
-                    cells[i][y].setPadding(cells[i][y].getPaddingLeft(), cells[i][y].getPaddingTop(), 100, cells[i][y].getPaddingBottom());
-                }
-
-
                 row.addView(cells[i][y]);
             }
             tLayout.addView(row);
